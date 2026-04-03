@@ -1,4 +1,8 @@
-# LuxeVoyage | AI-Powered Luxury Travel Planner
+<div align="center">
+  <img src="assets/logo.svg" width="120" height="120" alt="LuxeVoyage Logo" />
+  <h1>LuxeVoyage | AI-Powered Luxury Travel Planner</h1>
+  <p><i>Crafting extraordinary journeys with the speed of Llama 3.3.</i></p>
+</div>
 
 LuxeVoyage is a modern, high-end travel planning platform that leverages AI to create personalized, weather-aware itineraries. Built with a focus on experience and aesthetics, it features a "Nomad Identity Hub" for travelers to showcase their journeys and manage their travel persona.
 
