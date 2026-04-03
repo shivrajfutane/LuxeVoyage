@@ -436,7 +436,11 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-app.listen(port, '0.0.0.0', () => console.log(`[LuxeVoyage] Server cruising on http://localhost:${port}`));
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(port, '0.0.0.0', () => console.log(`[LuxeVoyage] Server cruising on http://localhost:${port}`));
+}
+
+export default app;
 
 // JSON 404 Handler (CRITICAL: Prevents HTML "Unexpected token '<'" errors in frontend)
 app.use((req, res) => {

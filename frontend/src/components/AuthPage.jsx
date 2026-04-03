@@ -68,7 +68,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
       setIsLoading(true);
       setError('');
       try {
-        const res = await fetch('http://localhost:5000/api/auth/google', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token: tokenResponse.access_token })
@@ -104,7 +104,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
         if (formData.password !== formData.confirmPassword) throw new Error("Passwords do not match");
         if (!formData.agreeTerms) throw new Error("You must agree to the Terms of Service");
 
-        const res = await fetch('http://localhost:5000/api/auth/signup', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
@@ -114,7 +114,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
         onLoginSuccess(data.user);
 
       } else if (authMode === 'login') {
-        const res = await fetch('http://localhost:5000/api/auth/login', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, password: formData.password })
@@ -124,7 +124,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
         onLoginSuccess(data.user);
 
       } else if (authMode === 'forgot_email') {
-        const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email })
@@ -138,7 +138,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
       } else if (authMode === 'forgot_pin') {
         if (formData.password !== formData.confirmPassword) throw new Error("New passwords do not match");
 
-        const res = await fetch('http://localhost:5000/api/auth/reset-password', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, pin: formData.pin, newPassword: formData.password })

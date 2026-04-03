@@ -3,6 +3,7 @@ import {
   ShieldCheck, Lock, Plus, Trash2, AlertCircle, 
   FileText, CreditCard, Landmark, LifeBuoy, Zap, Eye, EyeOff
 } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function TravelVault({ trip, onUpdate }) {
   const [showAdd, setShowAdd] = useState(false);
@@ -23,7 +24,7 @@ export default function TravelVault({ trip, onUpdate }) {
     setLoading(true);
     try {
       const tripId = trip._id || trip.tripId;
-      const response = await fetch(`http://localhost:5000/api/trips/${tripId}/vault`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}/vault`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -43,7 +44,7 @@ export default function TravelVault({ trip, onUpdate }) {
     if (!window.confirm("Remove this document from the secure vault?")) return;
     try {
       const tripId = trip._id || trip.tripId;
-      const response = await fetch(`http://localhost:5000/api/trips/${tripId}/vault/${docId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}/vault/${docId}`, {
         method: 'DELETE'
       });
       const updated = await response.json();

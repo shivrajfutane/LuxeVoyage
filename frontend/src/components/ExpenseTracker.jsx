@@ -5,6 +5,7 @@ import {
   Ticket, ShoppingBag, MoreHorizontal, Activity, Zap
 } from 'lucide-react';
 import useUser from '../hooks/useUser';
+import { API_BASE_URL } from '../config';
 
 const CATEGORIES = [
   { id: 'Food', icon: <Utensils size={14} />, color: '#fb7185' }, 
@@ -74,7 +75,7 @@ export default function ExpenseTracker({ trip, isSharedView }) {
       console.log('Sending Expense Payload:', payload);
 
       const tripId = trip.tripId || trip._id;
-      const response = await fetch(`http://localhost:5000/api/trips/${tripId}/expenses`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}/expenses`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -90,7 +91,7 @@ export default function ExpenseTracker({ trip, isSharedView }) {
     if (isSharedView) return;
     try {
       const tripId = trip.tripId || trip._id;
-      const response = await fetch(`http://localhost:5000/api/trips/${tripId}/expenses/${id}`, { method: 'DELETE' });
+      const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}/expenses/${id}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete');
       const updatedTrip = await response.json();
       setExpenses(updatedTrip.expenses);

@@ -148,7 +148,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
 
     const syncInterval = setInterval(async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/trips/${tripId}`);
+        const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}`);
         if (!response.ok) return;
         const updatedData = await response.json();
         // Only update parent if data has actually changed to prevent render loops
@@ -192,7 +192,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
       return alert("Please log in to join this journey!");
     }
     try {
-      const response = await fetch(`http://localhost:5000/api/trips/${results._id || results.tripId}/join`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${results._id || results.tripId}/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, name: user.name })
@@ -212,7 +212,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     const activityId = `${dayIdx}-${actIdx}`;
     setVotingId(activityId);
     try {
-      const response = await fetch(`http://localhost:5000/api/trips/${results._id || results.tripId}/activities/${dayIdx}/${actIdx}/vote`, {
+      const response = await fetch(`${API_BASE_URL}/api/trips/${results._id || results.tripId}/activities/${dayIdx}/${actIdx}/vote`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id })

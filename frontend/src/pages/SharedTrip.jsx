@@ -4,6 +4,7 @@ import TripResults from '../components/TripResults';
 import AuthPage from '../components/AuthPage';
 import { ArrowLeft, Loader, Globe, User } from 'lucide-react';
 import useUser from '../hooks/useUser';
+import { API_BASE_URL } from '../config';
 
 export default function SharedTrip() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export default function SharedTrip() {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/trips/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/trips/${id}`);
         if (!response.ok) {
           throw new Error('Trip not found or server is offline.');
         }
