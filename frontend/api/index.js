@@ -3,16 +3,22 @@ import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import Groq from 'groq-sdk';
-import connectDB from '../backend/db.js';
-import Trip from '../backend/models/Trip.js';
-import User from '../backend/models/User.js';
-import { getForecast } from '../backend/services/weather.js';
-import { sendDeleteOTP, sendResetPIN } from '../backend/services/email.js';
+import connectDB from '../../backend/db.js';
+import Trip from '../../backend/models/Trip.js';
+import User from '../../backend/models/User.js';
+import { getForecast } from '../../backend/services/weather.js';
+import { sendDeleteOTP, sendResetPIN } from '../../backend/services/email.js';
 import mongoose from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 
 dotenv.config();
-connectDB();
+
+// Defensively connect to DB
+try {
+  connectDB();
+} catch (err) {
+  console.error('[CRITICAL-STARTUP-ERROR] Database connection failed:', err);
+}
 
 const app = express();
 const port = process.env.PORT || 5000;

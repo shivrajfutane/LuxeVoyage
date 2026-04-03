@@ -12,7 +12,13 @@ import mongoose from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 
 dotenv.config();
-connectDB();
+
+// Defensively connect to DB
+try {
+  connectDB();
+} catch (err) {
+  console.error('[CRITICAL-STARTUP-ERROR] Database connection failed:', err);
+}
 
 const app = express();
 const port = process.env.PORT || 5000;
