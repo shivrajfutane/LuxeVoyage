@@ -151,7 +151,12 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
 
           <div style={{ flex: 1, minWidth: '300px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
-              <span style={{ background: 'rgba(212, 175, 55, 0.1)', color: 'var(--primary)', padding: '6px 18px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '900', letterSpacing: '2px' }}>VERIFIED NOMAD</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(212, 175, 55, 0.1)', padding: '6px 18px', borderRadius: '100px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="#d4af37" />
+                </svg>
+                <span style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '900', letterSpacing: '2px' }}>VERIFIED NOMAD</span>
+              </div>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock size={16} /> Member since {joinDate}</span>
             </div>
             <h1 style={{ fontSize: '4.5rem', fontWeight: '950', letterSpacing: '-3px', color: 'white', lineHeight: '1', margin: '0 0 10px 0' }}>{user.name}</h1>

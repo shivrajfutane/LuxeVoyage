@@ -80,7 +80,13 @@ function App() {
     return (
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'white' }}>
         <div className="animate-pulse" style={{ textAlign: 'center' }}>
-          <Compass size={40} color="var(--primary)" style={{ marginBottom: '20px' }} />
+          <div style={{ marginBottom: '25px', display: 'flex', justifyContent: 'center' }}>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" className="animate-pulse">
+              <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="url(#goldGradientLoader)" />
+              <path d="M12 5.5L13.5 10.5L18.5 12L13.5 13.5L12 18.5L10.5 13.5L5.5 12L10.5 10.5L12 5.5Z" fill="#050505" />
+              <defs><linearGradient id="goldGradientLoader" x1="2" y1="2" x2="22" y2="22"><stop stopColor="#f1cf5b" /><stop offset="0.5" stopColor="#d4af37" /><stop offset="1" stopColor="#b08d28" /></linearGradient></defs>
+            </svg>
+          </div>
           <h2 style={{ letterSpacing: '4px', textTransform: 'uppercase', fontSize: '0.9rem', opacity: 0.8 }}>Scanning Travel Vaults...</h2>
         </div>
       </div>
