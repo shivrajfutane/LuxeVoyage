@@ -42,6 +42,9 @@ const dbHealthCheck = (req, res, next) => {
 
 app.use('/api', dbHealthCheck);
 
+// Native Health Check (Vercel Stability)
+app.get('/api/ping', (req, res) => res.json({ status: 'alive' }));
+
 // Primary Trip Generation (AI)
 app.post('/api/plan-trip', async (req, res) => {
   try {
