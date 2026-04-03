@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import axios from 'axios';
 import dotenv from 'dotenv';
 import Groq from 'groq-sdk';
 import connectDB from './db.js';
@@ -190,13 +191,11 @@ app.post('/api/auth/google', async (req, res) => {
     const { token } = req.body;
     if (!token) return res.status(400).json({ error: 'Verification token missing' });
 
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    const { sub: googleId, email, name, picture } = payload;
+    // Use the access token to fetch user info from Google's userinfo endpoint
+    const googleResponse = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`);
+    
+    const { email, name, picture } = googleResponse.data;
+    if (!email) return res.status(400).json({ error: 'Failed to retrieve traveler identity' });
 
     let user = await User.findOne({ email });
     if (!user) {
@@ -212,7 +211,7 @@ app.post('/api/auth/google', async (req, res) => {
 
     res.json({ user: { id: user._id, name: user.name, email: user.email, profilePhoto: user.profilePhoto, createdAt: user.createdAt, preferences: user.preferences } });
   } catch (error) {
-    console.error('[GOOGLE-AUTH-ERROR]', error);
+    console.error('[GOOGLE-AUTH-ERROR]', error.response?.data || error.message);
     res.status(500).json({ error: 'Google authentication failed' });
   }
 });

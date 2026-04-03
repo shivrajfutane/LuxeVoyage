@@ -6,7 +6,6 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "backend/index.js" },
-    { "source": "/(.*)", "destination": "frontend/$1" },
-    { "source": "/(.*)", "destination": "frontend/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

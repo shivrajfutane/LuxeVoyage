@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Lock, User, Globe, Smartphone, ArrowRight, ShieldCheck, KeyRound, ArrowLeft } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import anime from 'animejs/lib/anime.es.js';
 import { shakeElement, pulseGlow } from '../hooks/useAnime';
 import { API_BASE_URL } from '../config';
@@ -63,29 +63,35 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
     }));
   };
 
-  const handleGoogleSuccess = async (idToken) => {
-    setIsLoading(true);
-    setError('');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: idToken })
-      });
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
+      setError('');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: tokenResponse.access_token })
+        });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Google Authentication failed');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Google Authentication failed');
 
-      onLoginSuccess(data.user);
-    } catch (err) {
-      if (err.message.includes('503') || err.message.toLowerCase().includes('database')) {
-        setError('DATABASE OFFLINE: LuxeVoyage cannot reach its vault. Please ensure your current IP is whitelisted in MongoDB Atlas.');
-      } else {
-        setError(err.message);
+        onLoginSuccess(data.user);
+      } catch (err) {
+        if (err.message.includes('503') || err.message.toLowerCase().includes('database')) {
+          setError('DATABASE OFFLINE: LuxeVoyage cannot reach its vault. Please ensure your current IP is whitelisted in MongoDB Atlas.');
+        } else {
+          setError(err.message);
+        }
+        setIsLoading(false);
       }
-      setIsLoading(false);
+    },
+    onError: (errorResponse) => {
+      console.error('Google Login Error:', errorResponse);
+      setError('Google Login failed. Please try again.');
     }
-  };
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -344,25 +350,14 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
               <span>OR CONTINUE WITH</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div className="google-login-wrapper" style={{ display: 'flex', justifyContent: 'center' }}>
-                <GoogleLogin
-                  onSuccess={credentialResponse => {
-                    handleGoogleSuccess(credentialResponse.credential);
-                  }}
-                  onError={() => {
-                    setError('Google Login failed. Please try again.');
-                  }}
-                  useOneTap
-                  theme="filled_black"
-                  shape="pill"
-                  width="100%"
-                />
-              </div>
-              <button type="button" className="social-btn" disabled={isLoading}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16.9463 3.06451C18.0699 1.63661 18.7905 0 18.2917 0C17.0674 0.224424 15.3683 1.1687 14.2868 2.51268C13.313 3.70889 12.4344 5.38555 12.9866 6.94297C14.3313 6.90379 15.8601 6.01428 16.9463 3.06451ZM22.5186 16.8524C22.086 18.0253 19.3364 24 15.5401 24C13.5658 24 12.8718 22.8665 10.8755 22.8665C8.83546 22.8665 8.01257 23.9593 6.35332 23.9593C4.54226 23.9593 1.61907 17.5855 0.5 15.156C-1.39956 10.9705 2.16279 8.16335 4.96874 8.16335C6.73292 8.16335 7.97169 9.38778 9.53126 9.38778C11.1351 9.38778 12.1158 8.08271 14.3323 8.08271C15.5134 8.08271 18.2435 8.44124 19.7844 10.7481C16.9189 12.5593 17.5113 16.2996 20.3541 17.4116C20.9168 17.6534 21.7348 17.669 22.5186 16.8524Z" />
-                </svg> Apple
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+              <button type="button" className="social-btn" onClick={() => loginWithGoogle()} disabled={isLoading} style={{ justifyContent: 'center' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg> Sign in with Google
               </button>
             </div>
           </>
