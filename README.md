@@ -7,7 +7,7 @@
 LuxeVoyage is a modern, high-end travel planning platform that leverages AI to create personalized, weather-aware itineraries. Built with a focus on experience and aesthetics, it features a "Nomad Identity Hub" for travelers to showcase their journeys and manage their travel persona.
 
 ![LuxeVoyage Banner](
-  <img src="assets/logo.svg"  alt="LuxeVoyage Logo" />
+  <img src="assets/logo.svg" width="10px" height="10px" alt="LuxeVoyage Logo" />
  
 </div>)
 
