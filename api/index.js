@@ -22,7 +22,14 @@ try {
 
 const app = express();
 const port = process.env.PORT || 5000;
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// Initialize Google Auth Client safely
+let client;
+if (process.env.GOOGLE_CLIENT_ID) {
+  client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+} else {
+  console.warn('[AUTH-WARNING] GOOGLE_CLIENT_ID NOT FOUND in environment variables. Google Login will be disabled.');
+}
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -220,8 +227,18 @@ app.post('/api/auth/google', async (req, res) => {
 
     res.json({ user: { id: user._id, name: user.name, email: user.email, profilePhoto: user.profilePhoto, createdAt: user.createdAt, preferences: user.preferences } });
   } catch (error) {
-    console.error('[GOOGLE-AUTH-ERROR]', error.response?.data || error.message);
-    res.status(500).json({ error: 'Google authentication failed' });
+    const errorDetail = error.response?.data || error.message;
+    console.error('[GOOGLE-AUTH-ERROR] Detailed failure:', errorDetail);
+    
+    // Check for specific common Google errors
+    if (errorDetail?.error === 'invalid_grant' || error.message.includes('401')) {
+      return res.status(401).json({ error: 'Google session expired. Please sign in again.' });
+    }
+
+    res.status(500).json({ 
+      error: 'Google authentication failed', 
+      details: process.env.NODE_ENV === 'development' ? errorDetail : 'Check server logs for trace ID'
+    });
   }
 });
 
