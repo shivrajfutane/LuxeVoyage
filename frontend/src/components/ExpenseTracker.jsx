@@ -25,11 +25,13 @@ export default function ExpenseTracker({ trip, isSharedView }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Extract numeric budget for calculations
-  const budgetString = trip.budget || trip.estimatedTotalCost || '0';
-  const match = budgetString.match(/\d+(?:,\d+)*/);
-  const rawBudget = match ? match[0].replace(/,/g, '') : '0';
-  const totalBudget = parseInt(rawBudget, 10) || 1;
+  // Robust Numeric Extraction for calculations (Prevents "₹1" balance error)
+  const totalBudget = useMemo(() => {
+    const raw = trip.budget || trip.estimatedTotalCost || "0";
+    const numericOnly = raw.toString().replace(/[^0-9]/g, "");
+    const parsed = parseInt(numericOnly, 10);
+    return isNaN(parsed) || parsed === 0 ? 1 : parsed; // Safety fallback to 1 to avoid division by zero
+  }, [trip.budget, trip.estimatedTotalCost]);
 
   const totalSpent = useMemo(() => expenses.reduce((sum, item) => sum + item.amount, 0), [expenses]);
   const remaining = totalBudget - totalSpent;

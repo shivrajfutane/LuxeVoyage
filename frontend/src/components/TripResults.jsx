@@ -59,6 +59,17 @@ const RealImage = ({ keyword, destination, width, height, isBanner, dayNumber, t
 };
 
 export default function TripResults({ results, user, onUpdate, isSharedView, onAuthRequired }) {
+  // CRITICAL: Prevent early processing crashes (Blank Page fix)
+  if (!results || !results.itinerary || !Array.isArray(results.itinerary)) {
+    return (
+      <div className="glass" style={{ padding: '80px', textAlign: 'center', margin: '40px auto', maxWidth: '800px' }}>
+        <h3 style={{ color: 'var(--primary)', marginBottom: '16px' }}>Exploring Destinations...</h3>
+        <p style={{ color: 'var(--text-muted)' }}>Our AI is finalizing your luxury routes. Please wait a moment.</p>
+        <button onClick={() => window.location.reload()} className="btn" style={{ width: 'auto', marginTop: '24px' }}>Retry Connection</button>
+      </div>
+    );
+  }
+
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('itinerary');
   const [activeDayIndex, setActiveDayIndex] = useState(0);
@@ -76,8 +87,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
 
   // Weather simulation for the itinerary
   const weatherData = useMemo(() => {
-    if (!results?.itinerary) return [];
-    const destLower = (results.destination || "").toLowerCase();
+    const destLower = (results?.destination || "").toLowerCase();
     const isRainyCity = ['london', 'seattle', 'amsterdam', 'paris'].some(c => destLower.includes(c));
     const isHotCity = ['dubai', 'miami', 'goa', 'cancun'].some(c => destLower.includes(c));
     
@@ -88,9 +98,9 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
       if (isRainyCity && (i === 1 || i === 3)) condition = 'Rainy';
       else if (i % 2 === 0) condition = 'Cloudy';
       
-      return { day: day.day, condition, temp };
+      return { day: day?.day || i+1, condition, temp };
     });
-  }, [results.itinerary, results.destination]);
+  }, [results?.itinerary, results?.destination]);
 
   const showWeatherAlert = useMemo(() => {
     return weatherData.some(d => d.condition === 'Rainy');
@@ -238,15 +248,6 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     setTimeout(() => setCopied(false), 3000);
   };
 
-  if (!results || !results.itinerary || !Array.isArray(results.itinerary)) {
-    return (
-      <div className="glass" style={{ padding: '80px', textAlign: 'center', margin: '40px auto', maxWidth: '800px' }}>
-        <h3 style={{ color: 'var(--primary)', marginBottom: '16px' }}>Itinerary under construction</h3>
-        <p style={{ color: 'var(--text-muted)' }}>The AI is finalizing your routes...</p>
-        <button onClick={() => window.location.reload()} className="btn" style={{ width: 'auto', marginTop: '24px' }}>Retry</button>
-      </div>
-    );
-  }
 
   return (
     <div style={{ opacity: 1 }}>

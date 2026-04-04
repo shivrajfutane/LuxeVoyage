@@ -61,6 +61,11 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
   };
 
   const requestDeleteOTP = async () => {
+    if (!user?.id) {
+      alert('Security Error: Your traveler ID is missing. Please refresh and try again.');
+      return;
+    }
+
     setIsDeleting(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/user/${user.id}/delete-request`, { method: 'POST' });
@@ -68,7 +73,8 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
         setDeleteStep('otp');
       } else {
         const data = await res.json();
-        alert(data.error || 'The security server is currently being synchronized. Please wait a moment and try again.');
+        const errorMsg = data.path ? `Security Route Not Found: ${data.path}` : (data.error || 'The security server is currently synchronized. Please wait a moment.');
+        alert(errorMsg);
       }
     } catch (err) {
       console.error('OTP request failed:', err);
