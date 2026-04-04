@@ -11,16 +11,20 @@ import { sendDeleteOTP, sendResetPIN } from '../backend/services/email.js';
 import mongoose from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 
-dotenv.config();
-
-// Defensively connect to DB
-try {
-  connectDB();
-} catch (err) {
-  console.error('[CRITICAL-STARTUP-ERROR] Database connection failed:', err);
-}
-
+// Define the Express application
 const app = express();
+
+// DATABASE CONNECTION MIDDLEWARE (Critical for Vercel)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('[DB-FATAL] Request blocked due to connection error');
+    res.status(500).json({ error: 'Vault Connection Failed', details: err.message });
+  }
+});
+
 const router = express.Router();
 const port = process.env.PORT || 5000;
 
