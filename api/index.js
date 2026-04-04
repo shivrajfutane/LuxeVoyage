@@ -11,6 +11,8 @@ import { sendDeleteOTP, sendResetPIN } from '../backend/services/email.js';
 import mongoose from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 
+dotenv.config();
+
 // Define the Express application
 const app = express();
 
