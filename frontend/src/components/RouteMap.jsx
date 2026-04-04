@@ -162,12 +162,12 @@ export default function RouteMap({ results, activeDayIndex, focusedActivityIndex
 
   return (
     <div className="glass" style={{ height: "400px", marginBottom: "40px", padding: "8px", position: "relative", overflow: 'hidden' }}>
-      {!hasValidCoords && (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 2000, background: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', borderRadius: '12px' }}>
-          <MapIcon size={48} color="var(--primary)" style={{ opacity: 0.5 }} />
+      {(!hasValidCoords && (!coords || coords.length === 0)) && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2000, background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(2px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', borderRadius: '12px', padding: '20px' }}>
+          <MapIcon size={32} color="var(--primary)" style={{ opacity: 0.5 }} />
           <div style={{ textAlign: 'center' }}>
-            <h4 style={{ margin: 0, color: 'white' }}>Mapping Unavailable</h4>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Coordinates for Day {activeDayIndex + 1} were not provided by the AI.</p>
+            <h4 style={{ margin: 0, color: 'white', fontSize: '0.9rem' }}>Mapping Limited</h4>
+            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>Coordinates for this day were not provided.</p>
           </div>
         </div>
       )}

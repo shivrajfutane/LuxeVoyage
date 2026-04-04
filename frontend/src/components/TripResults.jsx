@@ -161,17 +161,21 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
         const response = await fetch(`${API_BASE_URL}/api/trips/${tripId}`);
         if (!response.ok) return;
         const updatedData = await response.json();
-        // Only update parent if data has actually changed to prevent render loops
-        if (JSON.stringify(updatedData.packingList) !== JSON.stringify(results.packingList) || 
-            JSON.stringify(updatedData.expenses) !== JSON.stringify(results.expenses) ||
-            JSON.stringify(updatedData.vault) !== JSON.stringify(results.vault) ||
-            JSON.stringify(updatedData.collaborators) !== JSON.stringify(results.collaborators)) {
-          if (onUpdate) onUpdate(updatedData);
+        
+        // CRITICAL PROTECTION: Only sync if the new data is valid and has an itinerary
+        // This prevents the "Your Vision Awaits" reset issue
+        if (updatedData && updatedData.itinerary && Array.isArray(updatedData.itinerary)) {
+          if (JSON.stringify(updatedData.packingList) !== JSON.stringify(results.packingList) || 
+              JSON.stringify(updatedData.expenses) !== JSON.stringify(results.expenses) ||
+              JSON.stringify(updatedData.vault) !== JSON.stringify(results.vault) ||
+              JSON.stringify(updatedData.collaborators) !== JSON.stringify(results.collaborators)) {
+            if (onUpdate) onUpdate(updatedData);
+          }
         }
       } catch (err) {
-        console.warn('Sync heartbeat failed:', err);
+        // Silent fail for background sync
       }
-    }, 4000); // 4-second heartbeat for balance between speed and performance
+    }, 10000); // Relaxed to 10s for better stability
 
     return () => clearInterval(syncInterval);
   }, [results?._id, results?.tripId, onUpdate]);
@@ -423,15 +427,22 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
                             display: 'flex', gap: '20px', marginBottom: '20px', 
                             background: 'rgba(255,255,255,0.015)', padding: '15px', 
                             borderRadius: 'var(--radius-md)', border: '1px solid rgba(212,175,55,0.03)',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.3s ease', cursor: 'pointer'
+                          }}
+                          onClick={() => {
+                            setFocusedActivityKey(`${idx}-${i}`);
+                            setActiveDayIndex(idx);
+                            window.scrollTo({ top: 300, behavior: 'smooth' });
                           }}
                           onMouseOver={(e) => {
-                            e.currentTarget.style.background = 'rgba(212, 175, 55, 0.03)';
-                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.15)';
+                            e.currentTarget.style.background = 'rgba(212, 175, 55, 0.05)';
+                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.2)';
+                            e.currentTarget.style.transform = 'translateY(-2px)';
                           }}
                           onMouseOut={(e) => {
                             e.currentTarget.style.background = 'rgba(255,255,255,0.015)';
                             e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.03)';
+                            e.currentTarget.style.transform = 'translateY(0)';
                           }}
                         >
                           <div style={{ width: '80px', height: '80px', flexShrink: 0, borderRadius: '8px', overflow: 'hidden' }}>
