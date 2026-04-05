@@ -46,6 +46,14 @@ app.use(express.json({ limit: '10mb' }));
 
 router.get('/ping', (req, res) => res.json({ status: 'alive' }));
 
+// TEST ROUTE: Check environment variable presence
+router.get('/test-env', (req, res) => {
+  res.json({
+    mongoUri: process.env.MONGODB_URI ? 'SET ✅' : 'MISSING ❌',
+    uriPreview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 30) + '...' : 'NONE'
+  });
+});
+
 // DIAGNOSTIC TEST ROUTE (Remove after verification)
 router.get('/test-db', async (req, res) => {
   try {
