@@ -16,14 +16,13 @@ dotenv.config();
 // Define the Express application
 const app = express();
 
-// DATABASE CONNECTION MIDDLEWARE (Critical for Vercel)
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
-    console.error('[DB-FATAL] Request blocked due to connection error');
-    res.status(500).json({ error: 'Vault Connection Failed', details: err.message });
+    console.error("DB connection failed:", err.message);
+    return res.status(503).json({ error: "Database Offline" });
   }
 });
 
