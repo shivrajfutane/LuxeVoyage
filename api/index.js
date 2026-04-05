@@ -46,6 +46,17 @@ app.use(express.json({ limit: '10mb' }));
 
 router.get('/ping', (req, res) => res.json({ status: 'alive' }));
 
+// DIAGNOSTIC TEST ROUTE (Remove after verification)
+router.get('/test-db', async (req, res) => {
+  try {
+    await connectDB();
+    res.json({ status: 'Connected Successfully!', vault: 'Ready' });
+  } catch (err) {
+    console.error('[DIAGNOSTIC-FAIL]', err.message);
+    res.status(500).json({ error: 'Connection Failed', message: err.message });
+  }
+});
+
 // 1. Trip Generation (AI)
 router.post('/plan-trip', async (req, res) => {
   try {
