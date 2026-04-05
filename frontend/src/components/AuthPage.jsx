@@ -79,12 +79,8 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
 
         onLoginSuccess(data.user);
       } catch (err) {
-        if (err.message.includes('503') || err.message.toLowerCase().includes('database')) {
-          setError('DATABASE OFFLINE: LuxeVoyage cannot reach its vault. Please ensure your current IP is whitelisted in MongoDB Atlas.');
-        } else {
-          setError(err.message);
-        }
         setIsLoading(false);
+        setError(err.message || 'Google Authentication failed');
       }
     },
     onError: (errorResponse) => {
@@ -151,11 +147,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
         setFormData(prev => ({ ...prev, password: '', confirmPassword: '', pin: '' }));
       }
     } catch (err) {
-      if (err.status === 503 || err.message.includes('503') || err.message.toLowerCase().includes('database')) {
-        setError('DATABASE OFFLINE: LuxeVoyage cannot reach its vault. Please ensure your current IP is whitelisted in MongoDB Atlas (Network Access).');
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -238,11 +230,6 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
               <ShieldCheck size={18} /> Authentication Notice
             </div>
             <p style={{ margin: 0, lineHeight: '1.5', opacity: 0.9 }}>{error}</p>
-            {error.includes('DATABASE') && (
-              <div style={{ marginTop: '12px', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', fontSize: '0.8rem', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
-                <strong>How to fix:</strong> Log into MongoDB Atlas ➔ Network Access ➔ Add Current IP Address.
-              </div>
-            )}
           </div>
         )}
         

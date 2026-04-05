@@ -3,7 +3,7 @@ import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import Groq from 'groq-sdk';
-import connectDB from '../backend/db.js';
+import { connectDB } from '../lib/db.js';
 import Trip from '../backend/models/Trip.js';
 import User from '../backend/models/User.js';
 import { getForecast } from '../backend/services/weather.js';
@@ -22,7 +22,11 @@ app.use(async (req, res, next) => {
     next();
   } catch (err) {
     console.error("DB connection failed:", err.message);
-    return res.status(503).json({ error: "Database Offline" });
+    return res.status(503).json({ 
+      error: "Database Connection Failure", 
+      details: err.message,
+      code: err.name
+    });
   }
 });
 
