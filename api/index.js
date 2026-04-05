@@ -38,22 +38,6 @@ if (process.env.GOOGLE_CLIENT_ID) {
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Database Health Guard
-const dbHealthCheck = (req, res, next) => {
-  if (mongoose.connection.readyState !== 1 && mongoose.connection.readyState !== 2) {
-    console.error(`[DB-HEALTH-ALARM] Database state: ${mongoose.connection.readyState}. Rejecting request to: ${req.path}`);
-    return res.status(503).json({
-      error: 'Database Offline',
-      details: 'LuxeVoyage cannot reach its travel vault (MongoDB).',
-      action: 'ACTION REQUIRED: Please check your MongoDB Atlas whitelisting/connection string.'
-    });
-  }
-  next();
-};
-
-// Apply Health Check to all API routes
-router.use(dbHealthCheck);
-
 // --- API ROUTES ---
 
 router.get('/ping', (req, res) => res.json({ status: 'alive' }));
