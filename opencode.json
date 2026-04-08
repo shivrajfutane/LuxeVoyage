@@ -1,0 +1,18 @@
+{
+  "name": "LuxeVoyage",
+  "description": "AI-powered luxury trip planning platform",
+  "commands": {
+    "start": "npm start",
+    "frontend": "npm run client",
+    "backend": "npm run server",
+    "build": "npm run build"
+  },
+  "rules": {
+    "ignore": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.git/**",
+      "**/*.lock"
+    ]
+  }
+}
