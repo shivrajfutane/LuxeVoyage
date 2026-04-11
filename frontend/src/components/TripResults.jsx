@@ -59,17 +59,6 @@ const RealImage = ({ keyword, destination, width, height, isBanner, dayNumber, t
 };
 
 export default function TripResults({ results, user, onUpdate, isSharedView, onAuthRequired }) {
-  // CRITICAL: Prevent early processing crashes (Blank Page fix)
-  if (!results || !results.itinerary || !Array.isArray(results.itinerary)) {
-    return (
-      <div className="glass" style={{ padding: '80px', textAlign: 'center', margin: '40px auto', maxWidth: '800px' }}>
-        <h3 style={{ color: 'var(--primary)', marginBottom: '16px' }}>Exploring Destinations...</h3>
-        <p style={{ color: 'var(--text-muted)' }}>Our AI is finalizing your luxury routes. Please wait a moment.</p>
-        <button onClick={() => window.location.reload()} className="btn" style={{ width: 'auto', marginTop: '24px' }}>Retry Connection</button>
-      </div>
-    );
-  }
-
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('itinerary');
   const [activeDayIndex, setActiveDayIndex] = useState(0);
@@ -91,6 +80,8 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     const isRainyCity = ['london', 'seattle', 'amsterdam', 'paris'].some(c => destLower.includes(c));
     const isHotCity = ['dubai', 'miami', 'goa', 'cancun'].some(c => destLower.includes(c));
     
+    if (!results?.itinerary || !Array.isArray(results?.itinerary)) return [];
+
     return results.itinerary.map((day, i) => {
       let condition = 'Sunny';
       let temp = isHotCity ? 30 + (i % 3) : isRainyCity ? 12 + (i % 4) : 20 + (i % 5);
@@ -196,8 +187,19 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     }
   }, [results?._id, results?.tripId, dayCardsRef]);
 
-  const isOwner = user && user.id === results.userId?.toString();
-  const isCollaborator = user && results.collaborators?.some(c => c.userId?.toString() === user.id);
+  // CRITICAL: Prevent early processing crashes (Blank Page fix)
+  if (!results || !results.itinerary || !Array.isArray(results.itinerary)) {
+    return (
+      <div className="glass" style={{ padding: '80px', textAlign: 'center', margin: '40px auto', maxWidth: '800px' }}>
+        <h3 style={{ color: 'var(--primary)', marginBottom: '16px' }}>Exploring Destinations...</h3>
+        <p style={{ color: 'var(--text-muted)' }}>Our AI is finalizing your luxury routes. Please wait a moment.</p>
+        <button onClick={() => window.location.reload()} className="btn" style={{ width: 'auto', marginTop: '24px' }}>Retry Connection</button>
+      </div>
+    );
+  }
+
+  const isOwner = user && user.id === results?.userId?.toString();
+  const isCollaborator = user && results?.collaborators?.some(c => c.userId?.toString() === user.id);
   const canInteract = isOwner || isCollaborator;
 
   const handleJoin = async () => {
@@ -218,6 +220,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleVote = async (dayIdx, actIdx) => {
     if (!canInteract) {
       if (onAuthRequired) return onAuthRequired();
