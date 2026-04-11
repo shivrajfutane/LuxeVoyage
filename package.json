@@ -17,6 +17,7 @@
     "google-auth-library": "^10.6.2",
     "groq-sdk": "^1.1.2",
     "mongoose": "^9.3.3",
+    "node-cache": "^5.1.2",
     "nodemailer": "^8.0.4",
     "serverless-http": "^4.0.0"
   }
