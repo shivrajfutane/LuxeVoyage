@@ -258,22 +258,31 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
       {showShowcase && <ShowcaseMode results={results} onClose={() => setShowShowcase(false)} />}
       
       <div className="glass" style={{ padding: "30px", marginBottom: "30px", overflow: 'hidden' }}>
-        <h2 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "8px", display: "flex", flexWrap: 'wrap', alignItems: "center", gap: "12px" }}>
-          <MapPin color="var(--primary)" size={32} />
-          {results.destination}
+        <h2 className="text-gradient" style={{ 
+          fontSize: "clamp(1.5rem, 5vw, 2.5rem)", 
+          marginBottom: "16px", 
+          display: "flex", 
+          flexWrap: 'wrap', 
+          alignItems: "center", 
+          gap: "12px" 
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <MapPin color="var(--primary)" size={28} />
+            {results.destination}
+          </div>
           
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
             {!isOwner && !isCollaborator && (
               <button 
                 onClick={handleJoin}
                 style={{ 
                   background: 'var(--primary)', color: 'black', border: 'none', 
-                  padding: '10px 20px', borderRadius: '100px', fontSize: '0.9rem', 
+                  padding: '8px 16px', borderRadius: '100px', fontSize: '0.85rem', 
                   fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px',
                   cursor: 'pointer', transition: 'all 0.3s'
                 }}
               >
-                <UserPlus size={16} /> Join Journey
+                <UserPlus size={16} /> Join
               </button>
             )}
             <button 
@@ -281,7 +290,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
               style={{ 
                 background: 'rgba(212,175,55,0.1)', 
                 border: '1px solid rgba(212,175,55,0.3)', color: 'var(--primary)', 
-                padding: '10px 20px', borderRadius: '100px', fontSize: '0.9rem', 
+                padding: '8px 16px', borderRadius: '100px', fontSize: '0.85rem', 
                 fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px',
                 cursor: 'pointer', transition: 'all 0.3s'
               }}
@@ -291,24 +300,30 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
           </div>
         </h2>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-           <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', padding: '4px 12px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{
-                 width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', 
-                 marginRight: '10px', boxShadow: '0 0 10px #10b981', 
-                 animation: 'pulse 2s infinite' 
-              }} />
-              <Users size={14} color="var(--primary)" style={{ marginRight: '8px' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 'bold' }}>TRAVELLERS:</span>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '15px' }}>
+           <div style={{ 
+             display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', 
+             padding: '4px 12px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.08)',
+             flexWrap: 'wrap', gap: '8px'
+           }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{
+                   width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', 
+                   marginRight: '8px', boxShadow: '0 0 10px #10b981', 
+                   animation: 'pulse 2s infinite' 
+                }} />
+                <Users size={14} color="var(--primary)" style={{ marginRight: '6px' }} />
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 'bold' }}>COLLAB:</span>
+              </div>
+              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                 {results.collaborators && results.collaborators.map((c, i) => (
-                  <div key={i} title={c.name} style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(212,175,55,0.2)', border: '1px solid var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 'bold' }}>
+                  <div key={i} title={c.name} style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(212,175,55,0.2)', border: '1px solid var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', color: 'var(--primary)', fontWeight: 'bold' }}>
                     {(c.name || "U").charAt(0).toUpperCase()}
                   </div>
                 ))}
               </div>
            </div>
-           <button onClick={handleCopyLink} style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 'bold' }}>+ INVITE FRIENDS</button>
+           <button onClick={handleCopyLink} style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 'bold', padding: '4px 0' }}>+ INVITE</button>
         </div>
         
         <div style={{ display: "flex", gap: "15px", flexWrap: "wrap", marginTop: "20px" }}>
@@ -330,38 +345,36 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
       </div>
 
       <div style={{
-        position: 'sticky', top: 0, zIndex: 100, background: 'var(--surface)',
-        backdropFilter: 'blur(40px)', padding: '15px 24px', borderBottom: '1px solid var(--surface-border)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px',
+        position: 'sticky', top: 0, zIndex: 100, background: 'rgba(5,5,5,0.8)',
+        backdropFilter: 'blur(40px)', padding: '12px clamp(16px, 4vw, 24px)', borderBottom: '1px solid var(--surface-border)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px',
         boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
       }}>
         <div 
           ref={scrollRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}
           className="hide-scrollbar" 
           style={{ 
-            display: 'flex', gap: '12px', overflowX: 'auto', flex: 1, cursor: isDragging ? 'grabbing' : 'grab',
+            display: 'flex', gap: '8px', overflowX: 'auto', flex: 1, cursor: isDragging ? 'grabbing' : 'grab',
             WebkitOverflowScrolling: 'touch',
-            maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
+            paddingRight: '20px'
           }}
         >
           {[ 
-            { id: 'itinerary', label: 'Itinerary', icon: <Route size={16} /> },
-            { id: 'expenses', label: 'Expenses', icon: <DollarSign size={16} /> },
-            { id: 'packing', label: 'Packing List', icon: <ListTodo size={16} /> },
-
-            { id: 'currency', label: 'Currency', icon: <Banknote size={16} /> },
-            { id: 'booking', label: 'Booking Hub', icon: <Hotel size={16} /> },
-            { id: 'intel', label: 'Travel Intel', icon: <Shield size={16} /> },
-            { id: 'seasonality', label: 'Seasonality', icon: <Calendar size={16} /> }
+            { id: 'itinerary', label: 'Plan', icon: <Route size={16} /> },
+            { id: 'expenses', label: 'Split', icon: <DollarSign size={16} /> },
+            { id: 'packing', label: 'Pack', icon: <ListTodo size={16} /> },
+            { id: 'booking', label: 'Stay', icon: <Hotel size={16} /> },
+            { id: 'intel', label: 'Tips', icon: <Shield size={16} /> },
+            { id: 'seasonality', label: 'Weather', icon: <Calendar size={16} /> }
           ].map(tab => (
             <button 
               key={tab.id} 
               onClick={() => switchTab(tab.id)} 
               style={{ 
-                display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap',
-                background: activeTab === tab.id ? 'var(--primary)' : 'rgba(255,255,255,0.03)', 
+                display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap',
+                background: activeTab === tab.id ? 'var(--primary)' : 'rgba(255,255,255,0.05)', 
                 color: activeTab === tab.id ? 'black' : 'white', 
-                borderRadius: '100px', padding: '10px 20px', border: 'none', fontWeight: 'bold', cursor: 'pointer',
+                borderRadius: '100px', padding: '8px 16px', border: 'none', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -369,7 +382,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
             </button>
           ))}
         </div>
-        <button className="btn" onClick={() => setShowExport(true)} style={{ width: 'auto', fontSize: '0.85rem' }}>Export</button>
+        <button className="btn" onClick={() => setShowExport(true)} style={{ width: 'auto', padding: '8px 16px', fontSize: '0.8rem' }}>Export</button>
       </div>
 
       <div ref={tabContentRef}>
@@ -424,28 +437,20 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
                           key={i} 
                           className="activity-item"
                           style={{ 
-                            display: 'flex', gap: '20px', marginBottom: '20px', 
-                            background: 'rgba(255,255,255,0.015)', padding: '15px', 
+                            display: 'flex', gap: '16px', marginBottom: '16px', 
+                            background: 'rgba(255,255,255,0.015)', padding: '12px', 
                             borderRadius: 'var(--radius-md)', border: '1px solid rgba(212,175,55,0.03)',
-                            transition: 'all 0.3s ease', cursor: 'pointer'
+                            transition: 'all 0.3s ease', cursor: 'pointer',
+                            flexDirection: 'row', alignItems: 'flex-start'
                           }}
                           onClick={() => {
                             setFocusedActivityKey(`${idx}-${i}`);
                             setActiveDayIndex(idx);
                             window.scrollTo({ top: 300, behavior: 'smooth' });
                           }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.background = 'rgba(212, 175, 55, 0.05)';
-                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.2)';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.background = 'rgba(255,255,255,0.015)';
-                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.03)';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                          }}
+                          // ... hover styles kept via parent class if possible or inline
                         >
-                          <div style={{ width: '80px', height: '80px', flexShrink: 0, borderRadius: '8px', overflow: 'hidden' }}>
+                          <div style={{ width: 'clamp(60px, 15vw, 80px)', height: 'clamp(60px, 15vw, 80px)', flexShrink: 0, borderRadius: '8px', overflow: 'hidden' }}>
                             <RealImage 
                               keyword={act.place} 
                               destination={results.destination} 
@@ -456,12 +461,12 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
                               imageQuery={act.imageQuery}
                             />
                           </div>
-                          <div style={{ flex: 1 }}>
-                            <h4 style={{ margin: '0 0 5px 0' }}>{act.place}</h4>
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>{act.description}</p>
-                            <div style={{ marginTop: '8px', display: 'flex', gap: '10px' }}>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--primary)' }}>{act.time}</span>
-                              <span style={{ fontSize: '0.75rem', color: '#fbcfe8' }}>{act.cost}</span>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <h4 style={{ margin: '0 0 4px 0', fontSize: 'clamp(0.9rem, 3vw, 1.1rem)' }}>{act.place}</h4>
+                            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{act.description}</p>
+                            <div style={{ marginTop: '8px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                              <span style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 'bold' }}>{act.time}</span>
+                              <span style={{ fontSize: '0.7rem', color: '#fbcfe8', fontWeight: 'bold' }}>{act.cost}</span>
                             </div>
                           </div>
                         </div>

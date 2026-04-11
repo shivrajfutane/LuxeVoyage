@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Sparkles, Globe, Shield, Users, ArrowRight, Star, Zap, Map, Clock, DollarSign, Cloud, Compass, ChevronDown } from 'lucide-react';
+import { Sparkles, Globe, Shield, Users, ArrowRight, Star, Zap, Map, Clock, DollarSign, Cloud, Compass, ChevronDown, Menu as MenuIcon, X } from 'lucide-react';
 import anime from 'animejs/lib/anime.es.js';
 import { useAnimeReveal, useCountUp } from '../hooks/useAnime';
 
@@ -21,8 +21,7 @@ const STEPS = [
 
 export default function LandingPage({ onGetStarted }) {
   const heroRef = useRef(null);
-  const [statsVisible, setStatsVisible] = useState(false);
-  const statsRef = useCountUp(statsVisible);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const featuresRef = useAnimeReveal('.feature-card');
   const stepsRef = useAnimeReveal('.step-card', { delay: anime.stagger(150) });
 
@@ -68,13 +67,13 @@ export default function LandingPage({ onGetStarted }) {
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '18px 48px',
-        background: 'rgba(5,5,5,0.7)',
+        padding: '12px clamp(24px, 5vw, 48px)',
+        background: 'rgba(5,5,5,0.85)',
         backdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(212,175,55,0.12)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
             <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="url(#lg1)" />
             <path d="M12 5.5L13.5 10.5L18.5 12L13.5 13.5L12 18.5L10.5 13.5L5.5 12L10.5 10.5L12 5.5Z" fill="#050505" />
             <defs>
@@ -83,26 +82,60 @@ export default function LandingPage({ onGetStarted }) {
               </linearGradient>
             </defs>
           </svg>
-          <span style={{ fontSize: '1.4rem', fontWeight: '700', letterSpacing: '-0.5px' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: '700', letterSpacing: '-0.5px' }}>
             <span className="text-gradient">Luxe</span><span style={{ color: 'white' }}>Voyage</span>
           </span>
         </div>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <a href="#features" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }}
+
+        {/* Desktop Links */}
+        <div style={{ display: 'none', gap: '24px', alignItems: 'center' }} className="desktop-nav">
+          <a href="#features" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
             onMouseOver={e => e.target.style.color = 'var(--primary)'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'}>Features</a>
-          <a href="#how" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }}
+          <a href="#how" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
             onMouseOver={e => e.target.style.color = 'var(--primary)'} onMouseOut={e => e.target.style.color = 'var(--text-muted)'}>How It Works</a>
-          <button onClick={onGetStarted} className="btn" style={{ width: 'auto', padding: '10px 24px', fontSize: '0.95rem' }}>
-            Sign In <ArrowRight size={16} />
+          <button onClick={onGetStarted} className="btn" style={{ width: 'auto', padding: '8px 20px', fontSize: '0.9rem' }}>
+            Sign In <ArrowRight size={14} />
           </button>
         </div>
+
+        {/* Mobile Toggle */}
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          style={{ background: 'transparent', border: 'none', color: 'var(--primary)', cursor: 'pointer', display: 'flex' }}
+          className="mobile-toggle"
+        >
+          {mobileMenuOpen ? <X size={28} /> : <MenuIcon size={28} />}
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div style={{
+            position: 'fixed', top: '56px', left: 0, right: 0, bottom: 0,
+            background: 'var(--bg-color)', zIndex: 99, padding: '40px 24px',
+            display: 'flex', flexDirection: 'column', gap: '30px', textAlign: 'center',
+            animation: 'fadeIn 0.3s ease-out'
+          }}>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem', fontWeight: '600' }}>Features</a>
+            <a href="#how" onClick={() => setMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem', fontWeight: '600' }}>How It Works</a>
+            <button onClick={() => { onGetStarted(); setMobileMenuOpen(false); }} className="btn" style={{ fontSize: '1.2rem' }}>
+              Sign In <ArrowRight size={20} />
+            </button>
+          </div>
+        )}
+
+        <style>{`
+          @media (min-width: 768px) {
+            .desktop-nav { display: flex !important; }
+            .mobile-toggle { display: none !important; }
+          }
+        `}</style>
       </nav>
 
       {/* ===== HERO ===== */}
       <section ref={heroRef} style={{
         minHeight: '100vh', display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center', textAlign: 'center',
-        padding: '120px 24px 80px', position: 'relative', overflow: 'hidden',
+        padding: 'clamp(100px, 15vh, 120px) 24px 80px', position: 'relative', overflow: 'hidden',
       }}>
         {/* Animated orbs */}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
@@ -155,8 +188,8 @@ export default function LandingPage({ onGetStarted }) {
         </h1>
 
         <p className="hero-sub" style={{
-          fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', color: 'var(--text-muted)', maxWidth: '620px',
-          lineHeight: '1.7', marginBottom: '48px', opacity: 0,
+          fontSize: 'clamp(1rem, 3vw, 1.4rem)', color: 'var(--text-muted)', maxWidth: '620px',
+          lineHeight: '1.7', marginBottom: '40px', opacity: 0,
         }}>
           Tell us where you want to go. Our AI architect builds a weather-smart, crowd-aware,
           day-by-day luxury itinerary — in seconds.
@@ -198,7 +231,11 @@ export default function LandingPage({ onGetStarted }) {
               Everything a <span className="text-gradient">luxury traveler</span> needs
             </h2>
           </div>
-          <div ref={featuresRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+          <div ref={featuresRef} style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', 
+            gap: '24px' 
+          }}>
             {FEATURES.map((f, i) => (
               <div key={i} className="feature-card glass" style={{
                 padding: '32px', borderRadius: '24px', opacity: 0,
@@ -229,7 +266,11 @@ export default function LandingPage({ onGetStarted }) {
           </div>
           <div ref={stepsRef} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {STEPS.map((s, i) => (
-              <div key={i} className="step-card glass" style={{ padding: '32px', borderRadius: '20px', display: 'flex', gap: '28px', alignItems: 'flex-start', opacity: 0 }}>
+              <div key={i} className="step-card glass" style={{ 
+                padding: 'clamp(20px, 4vw, 32px)', borderRadius: '20px', 
+                display: 'flex', gap: 'clamp(16px, 4vw, 28px)', alignItems: 'flex-start', opacity: 0,
+                flexDirection: 'row'
+              }}>
                 <div style={{
                   fontSize: '2.5rem', fontWeight: '800', color: 'var(--primary)', opacity: 0.3,
                   lineHeight: 1, flexShrink: 0, fontVariantNumeric: 'tabular-nums',
@@ -266,12 +307,17 @@ export default function LandingPage({ onGetStarted }) {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+      <footer style={{ 
+        borderTop: '1px solid rgba(255,255,255,0.06)', 
+        padding: '40px clamp(24px, 5vw, 48px)', 
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', 
+        flexWrap: 'wrap', gap: '16px' 
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Compass size={18} color="var(--primary)" />
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>© 2026 LuxeVoyage. All rights reserved.</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>© 2026 LuxeVoyage. All rights reserved.</span>
         </div>
-        <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
           Built with ❤️ &amp; Groq AI
         </div>
       </footer>

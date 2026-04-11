@@ -33,12 +33,19 @@ body {
   color: var(--text-main);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  width: 100%;
 }
 
 h1, h2, h3, h4 {
   font-weight: 600;
   line-height: 1.2;
+  color: white;
 }
+
+h1 { font-size: clamp(2rem, 8vw, 4rem); }
+h2 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 4vw, 1.8rem); }
 
 /* Glassmorphism utility 2.0 */
 .glass {
@@ -78,7 +85,7 @@ h1, h2, h3, h4 {
 }
 
 .app-title {
-  font-size: 3.2rem;
+  font-size: clamp(2rem, 5vw, 3.2rem);
   margin-bottom: 12px;
   letter-spacing: -1px;
 }
@@ -111,7 +118,7 @@ h1, h2, h3, h4 {
   border-radius: var(--radius-md);
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
+  font-size: 16px; /* Prevents iOS zoom on focus */
   transition: all 0.3s ease;
 }
 
@@ -171,9 +178,10 @@ select.input option {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 16px;
+  min-height: 44px; /* Touch target size */
+  padding: 16px 24px;
   background: linear-gradient(135deg, #d4af37, #b08d28);
-  color: #020202; /* Dark text on gold for premium look */
+  color: #020202;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: var(--radius-md);
   font-size: 1.05rem;
@@ -207,15 +215,24 @@ select.input option {
 .container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 60px 24px;
+  padding: clamp(20px, 5vw, 60px) clamp(16px, 3vw, 24px);
 }
 
 .layout-grid {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 40px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
   min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .layout-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
 }
 
 .layout-grid > * {
@@ -425,4 +442,35 @@ select.input option {
 
 .image-container:not(.shimmer) img {
   opacity: 1;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Media Queries */
+@media (max-width: 1280px) {
+  :root { --radius-lg: 28px; }
+}
+
+@media (max-width: 1024px) {
+  .container { padding: 40px 20px; }
+}
+
+@media (max-width: 768px) {
+  :root { --radius-lg: 24px; }
+  .auth-card { padding: 30px 20px; }
+  .app-title { font-size: 2.5rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 30px 16px; }
+  h1 { font-size: 2.5rem; }
+  .btn { padding: 14px 20px; font-size: 1rem; }
+}
+
+@media (max-width: 320px) {
+  body { font-size: 14px; }
 }

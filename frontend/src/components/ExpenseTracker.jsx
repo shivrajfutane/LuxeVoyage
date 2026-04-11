@@ -105,13 +105,13 @@ export default function ExpenseTracker({ trip, isSharedView }) {
       
       {/* Visual Analytics Dashboard */}
       <div className="glass" style={{ padding: '30px', borderTop: `4px solid ${health.color}`, position: 'relative' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-          <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ flex: 1, minWidth: '200px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <PieChart color="var(--primary)" size={24} />
-              <h3 style={{ margin: 0, color: 'white', fontSize: '1.4rem' }}>Smart Analytics</h3>
+              <h3 style={{ margin: 0, color: 'white', fontSize: 'clamp(1.2rem, 4vw, 1.4rem)' }}>Analytics</h3>
             </div>
-            <p style={{ margin: '8px 0 0 0', color: 'var(--text-muted)', fontSize: '0.85rem' }}>Detailed breakdown of your journey's spending</p>
+            <p style={{ margin: '8px 0 0 0', color: 'var(--text-muted)', fontSize: '0.8rem' }}>Breakdown of journey's spending</p>
           </div>
           <div style={{
             background: health.color, color: 'black', padding: '6px 14px', borderRadius: '100px',
@@ -123,7 +123,7 @@ export default function ExpenseTracker({ trip, isSharedView }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
           
           {/* Spend Meter Card */}
           <div style={{ background: 'rgba(0,0,0,0.3)', padding: '24px', borderRadius: '16px' }}>
@@ -172,15 +172,21 @@ export default function ExpenseTracker({ trip, isSharedView }) {
       </div>
 
       {/* Add Expense Form Integrated with Categories */}
-      <div className="glass" style={{ padding: '30px' }}>
+      <div className="glass" style={{ padding: 'clamp(20px, 5vw, 30px)' }}>
         {!isSharedView && (
-          <form onSubmit={handleAddExpense} style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
-            <input type="text" placeholder="Description" className="input" value={title} onChange={e=>setTitle(e.target.value)} style={{ flex: 2, minWidth: '200px' }} />
-            <input type="number" placeholder="Cost (₹)" className="input" value={amount} onChange={e=>setAmount(e.target.value)} style={{ flex: 1, minWidth: '120px' }} />
-            <select className="input" value={category} onChange={e=>setCategory(e.target.value)} style={{ flex: 1, minWidth: '150px', background: '#0f172a', cursor: 'pointer' }}>
-              {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.id}</option>)}
-            </select>
-            <button type="submit" className="btn" disabled={loading} style={{ width: '60px', background: 'var(--primary)', color: 'black' }}><Plus size={20} /></button>
+          <form onSubmit={handleAddExpense} style={{ display: 'flex', gap: '12px', marginBottom: '30px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '2 1 200px' }}>
+              <input type="text" placeholder="Description" className="input" value={title} onChange={e=>setTitle(e.target.value)} />
+            </div>
+            <div style={{ flex: '1 1 120px' }}>
+              <input type="number" placeholder="Cost (₹)" className="input" value={amount} onChange={e=>setAmount(e.target.value)} />
+            </div>
+            <div style={{ flex: '1 1 150px' }}>
+              <select className="input" value={category} onChange={e=>setCategory(e.target.value)} style={{ background: '#0f172a', cursor: 'pointer' }}>
+                {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.id}</option>)}
+              </select>
+            </div>
+            <button type="submit" className="btn" disabled={loading} style={{ flex: '0 0 44px', width: '44px', height: '44px', padding: 0, background: 'var(--primary)', color: 'black' }}><Plus size={20} /></button>
           </form>
         )}
         
@@ -190,16 +196,16 @@ export default function ExpenseTracker({ trip, isSharedView }) {
           expenses.map(exp => {
             const cat = CATEGORIES.find(c => c.id === (exp.category || 'Other')) || CATEGORIES.find(c=>c.id==='Other');
             return (
-              <div key={exp._id} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                   <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', color: cat?.color }}><Zap size={18} /></div>
-                   <div>
-                      <div style={{ color: 'white', fontWeight: 'bold' }}>{exp.title}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{exp.category || 'General'} • Logged by {exp.payerName}</div>
+              <div key={exp._id} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)', gap: '12px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
+                   <div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', color: cat?.color, flexShrink: 0 }}><Zap size={16} /></div>
+                   <div style={{ minWidth: 0 }}>
+                      <div style={{ color: 'white', fontWeight: 'bold', fontSize: '0.9rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{exp.title}</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{exp.category || 'General'} • {exp.payerName}</div>
                    </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                   <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>₹{exp.amount.toLocaleString()}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                   <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>₹{exp.amount.toLocaleString()}</span>
                    {!isSharedView && <Trash2 size={16} color="#ef4444" style={{ cursor: 'pointer', opacity: 0.5 }} onClick={()=>handleDeleteExpense(exp._id)} />}
                 </div>
               </div>

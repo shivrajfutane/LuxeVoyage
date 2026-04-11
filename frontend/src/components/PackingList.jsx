@@ -75,21 +75,21 @@ export default function PackingList({ trip, user, isSharedView, onUpdate }) {
 
   return (
     <div style={{ opacity: 1 }}>
-      <div className="glass" style={{ padding: '30px', marginBottom: '30px', borderTop: '4px solid var(--primary)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '10px', background: 'rgba(241, 207, 91, 0.1)', borderRadius: '12px' }}>
-              <Package color="var(--primary)" size={28} />
+      <div className="glass" style={{ padding: 'clamp(20px, 5vw, 30px)', marginBottom: '30px', borderTop: '4px solid var(--primary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '200px' }}>
+            <div style={{ padding: '10px', background: 'rgba(241, 207, 91, 0.1)', borderRadius: '12px', flexShrink: 0 }}>
+              <Package color="var(--primary)" size={24} />
             </div>
-            <h3 style={{ fontSize: '1.6rem', color: 'white', margin: 0 }}>Social Packing Checklist</h3>
+            <h3 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.6rem)', color: 'white', margin: 0 }}>Packing Checklist</h3>
           </div>
           <button 
             onClick={handleGenerate} 
             disabled={loading || packingData.length > 0} 
             className="btn" 
-            style={{ width: 'auto', background: 'var(--primary)', color: 'black', padding: '12px 24px', fontWeight: 'bold' }}
+            style={{ width: 'auto', background: 'var(--primary)', color: 'black', padding: '10px 20px', fontWeight: 'bold', fontSize: '0.9rem' }}
           >
-            {loading ? <Zap className="animate-pulse" size={20} /> : packingData.length > 0 ? 'List Ready ✅' : 'Generate Shared List'}
+            {loading ? <Zap className="animate-pulse" size={18} /> : packingData.length > 0 ? 'List Ready ✅' : 'Generate List'}
           </button>
         </div>
       </div>
@@ -105,46 +105,51 @@ export default function PackingList({ trip, user, isSharedView, onUpdate }) {
                   key={item._id} 
                   className="packing-item"
                   style={{ 
-                    display: 'flex', alignItems: 'center', gap: '15px', padding: '16px', 
+                    display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', 
                     background: item.isPacked ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.02)', 
                     borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)',
-                    opacity: 0, // Initial state for animation
+                    opacity: 0,
                     transition: 'background 0.3s, border 0.3s, opacity 0.4s',
                     filter: item.isPacked ? 'grayscale(0.5)' : 'none'
                   }}
                 >
-                  <div onClick={() => handleToggle(item._id)} style={{ cursor: 'pointer' }}>
-                    {item.isPacked ? <CheckSquare color="var(--primary)" size={24} /> : <Square color="rgba(255,255,255,0.2)" size={24} />}
+                  <div onClick={() => handleToggle(item._id)} style={{ cursor: 'pointer', flexShrink: 0, padding: '4px' }}>
+                    {item.isPacked ? <CheckSquare color="var(--primary)" size={20} /> : <Square color="rgba(255,255,255,0.2)" size={20} />}
                   </div>
                   
-                  <div style={{ flex: 1 }}>
-                    <div style={{ color: item.isPacked ? 'var(--text-muted)' : 'white', textDecoration: item.isPacked ? 'line-through' : 'none', fontWeight: '500' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ 
+                      color: item.isPacked ? 'var(--text-muted)' : 'white', 
+                      textDecoration: item.isPacked ? 'line-through' : 'none', 
+                      fontWeight: '500', fontSize: '0.95rem',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                    }}>
                       {item.item}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {item.category} 
                       {item.assigneeName && (
-                        <span style={{ marginLeft: '10px', color: isClaimedByMe ? 'var(--primary)' : '#818cf8', fontWeight: 'bold' }}>
-                          • {isClaimedByMe ? 'You are bringing this' : `${item.assigneeName} is bringing this`}
+                        <span style={{ marginLeft: '8px', color: isClaimedByMe ? 'var(--primary)' : '#818cf8', fontWeight: 'bold' }}>
+                          • {isClaimedByMe ? 'You' : item.assigneeName}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                     {!item.assignedTo ? (
                       <button 
                         onClick={() => handleClaim(item._id)}
-                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '4px 8px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.65rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                       >
-                        <UserPlus size={14} /> Claim
+                        <UserPlus size={12} /> Claim
                       </button>
                     ) : isClaimedByMe ? (
                       <button 
                         onClick={() => handleUnclaim(item._id)}
-                        style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '4px 8px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.65rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                       >
-                        <UserMinus size={14} /> Unclaim
+                        <UserMinus size={12} /> Drop
                       </button>
                     ) : null}
                   </div>
