@@ -162,7 +162,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
   return (
     <div className="auth-container animate-fade-in">
       <div className="auth-header text-center" style={{ marginBottom: '40px' }}>
-        <h1 className="app-title text-gradient" style={{ fontSize: '2.8rem', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+        <h1 className="app-title text-gradient" style={{ fontSize: 'clamp(1.8rem, 6vw, 2.8rem)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="url(#goldGradient)" />
             <path d="M12 5.5L13.5 10.5L18.5 12L13.5 13.5L12 18.5L10.5 13.5L5.5 12L10.5 10.5L12 5.5Z" fill="#050505" />
@@ -184,7 +184,7 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
         </p>
       </div>
 
-      <div ref={cardRef} className="glass auth-card" style={{ opacity: 0 }}>
+      <div ref={cardRef} className="glass auth-card" style={{ opacity: 0, position: 'relative' }}>
         {authMode !== 'login' && authMode !== 'signup' && (
           <button onClick={() => switchMode('login')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '20px', fontSize: '0.9rem', fontFamily: 'Outfit' }}>
             <ArrowLeft size={16} /> Back to login
@@ -203,19 +203,18 @@ export default function AuthPage({ onLoginSuccess, onBack }) {
           <button 
             onClick={onBack} 
             style={{ 
-              position: 'absolute', 
-              top: '20px', 
-              right: '25px', 
+              display: 'flex',
+              alignItems: 'center', 
+              gap: '6px', 
               background: 'none', 
               border: 'none', 
               color: 'var(--text-muted)', 
               cursor: 'pointer', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '6px', 
               fontSize: '0.85rem',
               opacity: 0.7,
-              transition: 'opacity 0.2s'
+              transition: 'opacity 0.2s',
+              marginBottom: '16px',
+              fontFamily: 'Outfit, sans-serif'
             }}
             onMouseOver={(e) => e.currentTarget.style.opacity = 1}
             onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}

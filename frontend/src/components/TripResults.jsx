@@ -257,7 +257,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
     <div style={{ opacity: 1 }}>
       {showShowcase && <ShowcaseMode results={results} onClose={() => setShowShowcase(false)} />}
       
-      <div className="glass" style={{ padding: "30px", marginBottom: "30px", overflow: 'hidden' }}>
+      <div className="glass" style={{ padding: 'clamp(16px, 4vw, 30px)', marginBottom: '24px', overflow: 'hidden' }}>
         <h2 className="text-gradient" style={{ 
           fontSize: "clamp(1.5rem, 5vw, 2.5rem)", 
           marginBottom: "16px", 
@@ -326,15 +326,15 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
            <button onClick={handleCopyLink} style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 'bold', padding: '4px 0' }}>+ INVITE</button>
         </div>
         
-        <div style={{ display: "flex", gap: "15px", flexWrap: "wrap", marginTop: "20px" }}>
-           <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px 20px", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: "150px" }}>
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
+           <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px 16px", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px", flex: '1 1 140px', minWidth: "120px" }}>
               <Wallet size={20} color="#a5b4fc" />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Est. Cost</span>
                 <span style={{ fontWeight: "600" }}>{results.estimatedTotalCost}</span>
               </div>
            </div>
-           <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px 20px", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: "150px" }}>
+           <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px 16px", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px", flex: '1 1 140px', minWidth: "120px" }}>
               <Calendar size={20} color="#fbcfe8" />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Duration</span>
@@ -345,9 +345,9 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
       </div>
 
       <div style={{
-        position: 'sticky', top: 0, zIndex: 100, background: 'rgba(5,5,5,0.8)',
-        backdropFilter: 'blur(40px)', padding: '12px clamp(16px, 4vw, 24px)', borderBottom: '1px solid var(--surface-border)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px',
+        position: 'sticky', top: 0, zIndex: 100, background: 'rgba(5,5,5,0.85)',
+        backdropFilter: 'blur(40px)', padding: '10px clamp(10px, 3vw, 24px)', borderBottom: '1px solid var(--surface-border)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px',
         boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
       }}>
         <div 
@@ -371,10 +371,10 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
               key={tab.id} 
               onClick={() => switchTab(tab.id)} 
               style={{ 
-                display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap',
+                display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap',
                 background: activeTab === tab.id ? 'var(--primary)' : 'rgba(255,255,255,0.05)', 
                 color: activeTab === tab.id ? 'black' : 'white', 
-                borderRadius: '100px', padding: '8px 16px', border: 'none', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer',
+                borderRadius: '100px', padding: '7px 12px', border: 'none', fontSize: 'clamp(0.7rem, 2vw, 0.85rem)', fontWeight: '700', cursor: 'pointer',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -382,7 +382,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
             </button>
           ))}
         </div>
-        <button className="btn" onClick={() => setShowExport(true)} style={{ width: 'auto', padding: '8px 16px', fontSize: '0.8rem' }}>Export</button>
+        <button className="btn" onClick={() => setShowExport(true)} style={{ width: 'auto', padding: '7px 14px', fontSize: '0.75rem', flexShrink: 0 }}>Export</button>
       </div>
 
       <div ref={tabContentRef}>
@@ -418,7 +418,7 @@ export default function TripResults({ results, user, onUpdate, isSharedView, onA
                       <span style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>{dayWeather.temp}°C</span>
                     </div>
                     
-                    <div style={{ height: '180px', position: 'relative' }}>
+                    <div style={{ height: 'clamp(120px, 25vw, 180px)', position: 'relative' }}>
                       <RealImage 
                         keyword={day.theme} 
                         destination={results.destination} 

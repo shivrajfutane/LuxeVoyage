@@ -290,7 +290,7 @@ export default function LandingPage({ onGetStarted }) {
         <div style={{
           maxWidth: '700px', margin: '0 auto',
           background: 'linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.03))',
-          border: '1px solid rgba(212,175,55,0.25)', borderRadius: '32px', padding: '64px 48px',
+          border: '1px solid rgba(212,175,55,0.25)', borderRadius: 'clamp(20px, 4vw, 32px)', padding: 'clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px)',
           boxShadow: '0 0 80px rgba(212,175,55,0.08)',
         }}>
           <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✈️</div>

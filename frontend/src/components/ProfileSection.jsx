@@ -119,19 +119,19 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
   const stats = user.stats || { journeys: 0, miles: '0k', continents: 0 };
 
   return (
-    <div className="container animate-fade-in" style={{ padding: '40px 20px', maxWidth: '1200px' }}>
-      <div ref={profileCardRef} className="glass" style={{ padding: '60px', borderRadius: '40px', marginBottom: '40px', position: 'relative', overflow: 'hidden' }}>
+    <div className="container animate-fade-in" style={{ padding: 'clamp(16px, 4vw, 40px) clamp(12px, 3vw, 20px)', maxWidth: '1200px' }}>
+      <div ref={profileCardRef} className="glass" style={{ padding: 'clamp(24px, 5vw, 60px)', borderRadius: 'var(--radius-lg)', marginBottom: '30px', position: 'relative', overflow: 'hidden' }}>
 
         {/* Profile Card Background Glow */}
         <div style={{ position: 'absolute', top: '-10% ', right: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ display: 'flex', gap: '60px', alignItems: 'center', flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', gap: 'clamp(20px, 5vw, 60px)', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
 
           {/* Avatar Section */}
           <div style={{ position: 'relative' }}>
             <div style={{
-              width: '200px', height: '200px', borderRadius: '50%',
-              border: '4px solid rgba(212, 175, 55, 0.3)', padding: '8px',
+               width: 'clamp(120px, 25vw, 200px)', height: 'clamp(120px, 25vw, 200px)', borderRadius: '50%',
+               border: '3px solid rgba(212, 175, 55, 0.3)', padding: '6px',
               boxShadow: '0 0 50px rgba(212, 175, 55, 0.15)'
             }}>
               <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -155,8 +155,8 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
             </label>
           </div>
 
-          <div style={{ flex: 1, minWidth: '300px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+          <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(212, 175, 55, 0.1)', padding: '6px 18px', borderRadius: '100px' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="#d4af37" />
@@ -165,12 +165,12 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
               </div>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock size={16} /> Member since {joinDate}</span>
             </div>
-            <h1 style={{ fontSize: '4.5rem', fontWeight: '950', letterSpacing: '-3px', color: 'white', lineHeight: '1', margin: '0 0 10px 0' }}>{user.name}</h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h1 style={{ fontSize: 'clamp(1.8rem, 7vw, 4rem)', fontWeight: '950', letterSpacing: '-2px', color: 'white', lineHeight: '1.1', margin: '0 0 8px 0', wordBreak: 'break-word' }}>{user.name}</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(0.8rem, 2.5vw, 1.1rem)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', wordBreak: 'break-all' }}>
               {user.email} • {user.preferences?.travelStyle || 'Elite Voyager'}
             </p>
 
-            <div style={{ display: 'flex', gap: '16px', marginTop: '30px' }}>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
               <button
                 onClick={() => setShowShareModal(true)}
                 className="btn"
@@ -193,7 +193,7 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '30px' }}>
+          <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 30px)', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '2.5rem', fontWeight: '950', color: 'white' }}>{stats.journeys}</div>
               <div style={{ fontSize: '0.7rem', letterSpacing: '2px', color: 'var(--text-muted)', fontWeight: 'bold' }}>JOURNEYS</div>
@@ -210,7 +210,7 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
         </div>
 
         {showDeleteConfirm && (
-          <div className="animate-slide-up" style={{ marginTop: '40px', padding: '30px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '24px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+          <div className="animate-slide-up" style={{ marginTop: '24px', padding: 'clamp(16px, 4vw, 30px)', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '20px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               <AlertTriangle color="#f87171" size={32} />
               <div>
@@ -280,7 +280,7 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <button
           onClick={() => setActiveTab('history')}
           style={{
@@ -305,7 +305,7 @@ export default function ProfileSection({ user, onViewTrip, onUpdateUser, onLogou
         </button>
       </div>
 
-      <div className="glass" style={{ padding: '40px', borderRadius: '32px' }}>
+      <div className="glass" style={{ padding: 'clamp(16px, 4vw, 40px)', borderRadius: 'var(--radius-lg)' }}>
         {activeTab === 'history' ? (
           <TripHistory userId={user.id} onViewTrip={onViewTrip} />
         ) : (

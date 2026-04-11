@@ -43,9 +43,9 @@ h1, h2, h3, h4 {
   color: white;
 }
 
-h1 { font-size: clamp(2rem, 8vw, 4rem); }
-h2 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
-h3 { font-size: clamp(1.2rem, 4vw, 1.8rem); }
+h1 { font-size: clamp(1.8rem, 6vw, 4rem); }
+h2 { font-size: clamp(1.4rem, 5vw, 2.5rem); }
+h3 { font-size: clamp(1.1rem, 3.5vw, 1.8rem); }
 
 /* Glassmorphism utility 2.0 */
 .glass {
@@ -85,7 +85,7 @@ h3 { font-size: clamp(1.2rem, 4vw, 1.8rem); }
 }
 
 .app-title {
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
   margin-bottom: 12px;
   letter-spacing: -1px;
 }
@@ -215,7 +215,7 @@ select.input option {
 .container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: clamp(20px, 5vw, 60px) clamp(16px, 3vw, 24px);
+  padding: clamp(16px, 5vw, 60px) clamp(12px, 3vw, 24px);
 }
 
 .layout-grid {
@@ -239,6 +239,13 @@ select.input option {
   min-width: 0;
 }
 
+/* Responsive form grid (budget + days side by side) */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
 /* Authentication Page Styles */
 .auth-container {
   min-height: 100vh;
@@ -246,13 +253,14 @@ select.input option {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 40px 16px;
 }
 
 .auth-card {
   width: 100%;
   max-width: 480px;
   padding: 40px 32px;
+  position: relative;
 }
 
 .divider {
@@ -450,27 +458,136 @@ img {
   display: block;
 }
 
-/* Media Queries */
+/* ========================================================================= */
+/* RESPONSIVE MEDIA QUERIES — Mobile-First Approach                         */
+/* ========================================================================= */
+
+/* ----- MOBILE: up to 480px (small phones) ----- */
+@media (max-width: 480px) {
+  :root {
+    --radius-lg: 20px;
+    --radius-md: 14px;
+  }
+
+  body { font-size: 14px; }
+  
+  .container { padding: 16px 12px; }
+
+  .btn { padding: 14px 18px; font-size: 0.95rem; }
+
+  .glass { border-radius: var(--radius-lg); }
+
+  .auth-card { padding: 24px 16px; }
+
+  .auth-container { padding: 20px 12px; }
+
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* App header — stack & shrink on tiny screens */
+  .app-layout header {
+    padding: 10px 12px !important;
+  }
+
+  .app-layout header > div {
+    flex-wrap: wrap;
+    gap: 10px !important;
+  }
+
+  .app-layout header nav {
+    gap: 4px !important;
+  }
+
+  .app-layout header nav button {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ----- MOBILE: up to 768px (phones + small tablets) ----- */
+@media (max-width: 768px) {
+  :root { --radius-lg: 22px; }
+
+  .container { padding: 20px 14px; }
+
+  .auth-card { padding: 28px 20px; }
+
+  .app-title { font-size: clamp(1.6rem, 6vw, 2.5rem); }
+
+  /* App header — make responsive */
+  .app-layout header {
+    padding: 10px 14px !important;
+  }
+
+  .app-layout header > div {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  /* Logo + nav group stacks on mobile */
+  .app-layout header > div > div:first-child {
+    flex-wrap: wrap;
+    gap: 10px !important;
+  }
+
+  .app-layout header > div > div:first-child > nav {
+    width: 100%;
+    order: 3;
+  }
+
+  .app-layout header nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .app-layout header nav button {
+    flex: 1;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
+    justify-content: center;
+  }
+
+  /* Profile chip in header — simplified */
+  .app-layout header > div > div:last-child {
+    gap: 10px !important;
+  }
+
+  .app-layout header > div > div:last-child > div:first-child {
+    padding: 4px 10px !important;
+  }
+
+  .app-layout header > div > div:last-child > div:first-child > span {
+    display: none !important; /* Hide name, show avatar only */
+  }
+
+  /* Planner heading responsive */
+  .container h1 {
+    font-size: clamp(1.6rem, 6vw, 3.5rem) !important;
+  }
+
+  .container > div > p {
+    font-size: 1rem !important;
+  }
+}
+
+/* ----- TABLET: up to 1024px ----- */
+@media (max-width: 1024px) {
+  .container { padding: 30px 16px; }
+
+  /* Layout grid: single column on tablet */
+  .layout-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layout-grid > div:first-child {
+    position: static !important; /* Remove sticky form */
+  }
+}
+
+/* ----- LARGE SCREENS: 1280px+ ----- */
 @media (max-width: 1280px) {
   :root { --radius-lg: 28px; }
-}
-
-@media (max-width: 1024px) {
-  .container { padding: 40px 20px; }
-}
-
-@media (max-width: 768px) {
-  :root { --radius-lg: 24px; }
-  .auth-card { padding: 30px 20px; }
-  .app-title { font-size: 2.5rem; }
-}
-
-@media (max-width: 480px) {
-  .container { padding: 30px 16px; }
-  h1 { font-size: 2.5rem; }
-  .btn { padding: 14px 20px; font-size: 1rem; }
-}
-
-@media (max-width: 320px) {
-  body { font-size: 14px; }
 }
