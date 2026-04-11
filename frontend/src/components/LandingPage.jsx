@@ -12,12 +12,6 @@ const FEATURES = [
   { icon: <Map size={28} color="#60a5fa" />, title: 'Booking Hub', desc: 'One-click redirects to hotels, restaurants, and flights — pre-filled with your destination.' },
 ];
 
-const STATS = [
-  { value: '50K+', label: 'Trips Planned' },
-  { value: '190+', label: 'Destinations' },
-  { value: '4.9★', label: 'Avg Rating' },
-  { value: '12K+', label: 'Happy Travelers' },
-];
 
 const STEPS = [
   { num: '01', title: 'Describe Your Journey', desc: 'Enter destination, budget, travel style, and dates. The more detail the better.' },
@@ -194,25 +188,6 @@ export default function LandingPage({ onGetStarted }) {
         </div>
       </section>
 
-      {/* ===== STATS ===== */}
-      <section ref={statsRef} style={{
-        background: 'rgba(212,175,55,0.04)', borderTop: '1px solid rgba(212,175,55,0.12)',
-        borderBottom: '1px solid rgba(212,175,55,0.12)', padding: '40px 24px',
-      }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', textAlign: 'center' }}>
-          {[
-            { count: 50, suffix: 'K+', label: 'Trips Planned' },
-            { count: 190, suffix: '+', label: 'Destinations' },
-            { count: 4.9, suffix: '★', label: 'Avg Rating' },
-            { count: 12, suffix: 'K+', label: 'Happy Travelers' },
-          ].map((s, i) => (
-            <div key={i}>
-              <div data-count={s.count} data-suffix={s.suffix} style={{ fontSize: '2.2rem', fontWeight: '800', color: 'var(--primary)', letterSpacing: '-1px' }}>0{s.suffix}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ===== FEATURES ===== */}
       <section id="features" style={{ padding: '100px 24px' }}>

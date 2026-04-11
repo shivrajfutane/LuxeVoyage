@@ -216,6 +216,26 @@ app.post('/api/auth/google', async (req, res) => {
   }
 });
 
+// COLLABORATIVE JOIN
+app.post('/api/trips/:id/join', async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+    
+    const { userId, name } = req.body;
+    const isAlreadyCollaborator = trip.collaborators?.some(c => c.userId?.toString() === userId);
+    
+    if (!isAlreadyCollaborator && trip.userId.toString() !== userId) {
+      if (!trip.collaborators) trip.collaborators = [];
+      trip.collaborators.push({ userId, name });
+      await trip.save();
+    }
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Join failed' });
+  }
+});
+
 // EXPENSE MANAGEMENT
 app.post('/api/trips/:id/expenses', async (req, res) => {
   try {

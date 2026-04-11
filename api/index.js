@@ -274,6 +274,25 @@ router.delete('/user/:userId', async (req, res) => {
 });
 
 // 6. Collaborative Features
+router.post('/trips/:id/join', async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+    
+    const { userId, name } = req.body;
+    const isAlreadyCollaborator = trip.collaborators?.some(c => c.userId?.toString() === userId);
+    
+    if (!isAlreadyCollaborator && trip.userId.toString() !== userId) {
+      if (!trip.collaborators) trip.collaborators = [];
+      trip.collaborators.push({ userId, name });
+      await trip.save();
+    }
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Join failed' });
+  }
+});
+
 router.post('/trips/:id/expenses', async (req, res) => {
   try {
     const trip = await Trip.findById(req.params.id);
@@ -282,6 +301,76 @@ router.post('/trips/:id/expenses', async (req, res) => {
     res.json(trip);
   } catch (error) {
     res.status(500).json({ error: 'Expense add failed' });
+  }
+});
+
+// 7. Packing List
+router.post('/trips/:id/packing/generate', async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const prompt = `Generate a smart travel packing list for a ${trip.days}-day trip to ${trip.destination}. 
+    Budget: ${trip.budget}. Style: ${trip.travelStyle}.
+    Output JSON ONLY as an array of objects with "item" and "category" (e.g., Electronics, Clothing, Essentials).`;
+
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'llama-3.3-70b-versatile',
+      response_format: { type: 'json_object' }
+    });
+
+    let list = JSON.parse(completion.choices[0]?.message?.content || "[]");
+    if (list.packingList) list = list.packingList;
+    if (list.items) list = list.items;
+    if (!Array.isArray(list)) list = Object.values(list).find(v => Array.isArray(v)) || [];
+
+    trip.packingList = list.map(i => ({ item: i.item, category: i.category, isPacked: false }));
+    await trip.save();
+    res.json(trip);
+  } catch (error) {
+    console.error('[PACKING-GEN-ERROR]', error);
+    res.status(500).json({ error: 'Failed to generate packing strategy' });
+  }
+});
+
+router.patch('/trips/:id/packing/:itemId/toggle', async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    const item = trip.packingList.id(req.params.itemId);
+    item.isPacked = !item.isPacked;
+    await trip.save();
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to toggle item' });
+  }
+});
+
+router.patch('/trips/:id/packing/:itemId/claim', async (req, res) => {
+  try {
+    const { userId, userName } = req.body;
+    const trip = await Trip.findById(req.params.id);
+    const item = trip.packingList.id(req.params.itemId);
+    item.assignedTo = userId;
+    item.assigneeName = userName;
+    await trip.save();
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to claim item' });
+  }
+});
+
+router.patch('/trips/:id/packing/:itemId/unclaim', async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+    const item = trip.packingList.id(req.params.itemId);
+    item.assignedTo = null;
+    item.assigneeName = null;
+    await trip.save();
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to unclaim item' });
   }
 });
 
