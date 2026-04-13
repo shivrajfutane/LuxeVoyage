@@ -48,17 +48,6 @@ export default function LandingPage({ onGetStarted }) {
       .add({ targets: '.hero-ctas', opacity: [0, 1], translateY: [20, 0], duration: 600 }, '-=300');
   }, []);
 
-  // Stats count-up on scroll
-  useEffect(() => {
-    const el = statsRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setStatsVisible(true); observer.disconnect(); } },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
 
   return (
