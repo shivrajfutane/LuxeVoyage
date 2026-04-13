@@ -162,7 +162,7 @@ export default function RouteMap({ results, activeDayIndex, focusedActivityIndex
 
   return (
     <div className="glass" style={{ height: "400px", marginBottom: "40px", padding: "8px", position: "relative", overflow: 'hidden' }}>
-      {(!hasValidCoords && (!coords || coords.length === 0)) && (
+      {!hasValidCoords && (
         <div style={{ position: 'absolute', inset: 0, zIndex: 2000, background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(2px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', borderRadius: '12px', padding: '20px' }}>
           <MapIcon size={32} color="var(--primary)" style={{ opacity: 0.5 }} />
           <div style={{ textAlign: 'center' }}>
