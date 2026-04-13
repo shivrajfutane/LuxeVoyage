@@ -7,10 +7,14 @@ import App from './App.jsx'
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '448966911909-6t0pi4ue0fo30j618onn0n1pgluhvdsf.apps.googleusercontent.com';
 
-import Debug from './debug.jsx'
+import ErrorBoundary from './ErrorBoundary.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Debug />
-  </StrictMode>,
+  <ErrorBoundary>
+    <BrowserRouter>
+      <GoogleOAuthProvider clientId={clientId}>
+        <App />
+      </GoogleOAuthProvider>
+    </BrowserRouter>
+  </ErrorBoundary>,
 )
